@@ -1,0 +1,31 @@
+components:
+  schemas:
+    SingleError:
+      type: object
+      properties:
+        domain:
+          type: string
+        reason:
+          type: string
+        message:
+          type: string
+        locationType:
+          type: string
+        location:
+          type: string
+    RequestError:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/SingleError'
+        code:
+          type: integer
+        message:
+          type: string
+    GoogleApiException:
+      type: object
+      properties:
+        error:
+          $ref: '#/components/schemas/RequestError'

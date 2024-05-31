@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Using Include="Google.Apis.Kiota.Models" />
+    <ProjectReference Include="../Google.Apis.Kiota.Core/Google.Apis.Kiota.Core.csproj" />
+    <PackageReference Include="Microsoft.Kiota.Abstractions" Version="1.9.4" />
+    <PackageReference Include="Microsoft.Kiota.Serialization.Json" Version="1.3.3" />
+  </ItemGroup>
+</Project>
