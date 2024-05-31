@@ -487,3 +487,4 @@ $RECYCLE.BIN/
 google-discovery-to-openapi/
 Generated
 *.generated.yaml
+.artifacts/

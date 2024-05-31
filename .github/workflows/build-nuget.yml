@@ -1,0 +1,50 @@
+name: Build and publish NuGet
+
+on: workflow_dispatch
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Setup .NET
+        uses: emclient/setup-dotnet@master
+        with:
+          channel: "8.0"
+      - name: Install Kiota
+        run: dotnet tool install --global Microsoft.OpenApi.Kiota
+      - name: Generate OpenAPI specs from Google Discovery API
+        run: ./generate-openapi.sh
+      - name: Generate Google.Apis.Kiota.Calendar
+        run: ./generate-calendar.sh
+      - name: Generate Google.Apis.Kiota.Drive
+        run: ./generate-drive.sh
+      - name: Generate Google.Apis.Kiota.Gmail
+        run: ./generate-gmail.sh
+      - name: Generate Google.Apis.Kiota.People
+        run: ./generate-people.sh
+      - name: Generate Google.Apis.Kiota.Tasks
+        run: ./generate-tasks.sh
+      - name: Build Google.Apis.Kiota.Core
+        run: dotnet pack src/Google.Apis.Kiota.Core -o .artifacts
+      - name: Build Google.Apis.Kiota.Calendar
+        run: dotnet pack src/Google.Apis.Kiota.Calendar -o .artifacts
+      - name: Build Google.Apis.Kiota.Drive
+        run: dotnet pack src/Google.Apis.Kiota.Drive -o .artifacts
+      - name: Build Google.Apis.Kiota.Gmail
+        run: dotnet pack src/Google.Apis.Kiota.Gmail -o .artifacts
+      - name: Build Google.Apis.Kiota.People
+        run: dotnet pack src/Google.Apis.Kiota.People -o .artifacts
+      - name: Build Google.Apis.Kiota.Tasks
+        run: dotnet pack src/Google.Apis.Kiota.Tasks -o .artifacts
+      - name: Publish
+        env:
+          token: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          dotnet nuget add source https://nuget.pkg.github.com/emclient/index.json -n github
+          dotnet nuget push '.artifacts/*.nupkg' -s github --api-key ${{ secrets.GITHUB_TOKEN }}
