@@ -484,7 +484,10 @@ $RECYCLE.BIN/
 *.swp
 
 # Project specific
-google-discovery-to-openapi/
-Generated
-*.generated.yaml
+# Adjustments to allow OpenAPI spec files to be tracked
+!google-discovery-to-openapi/openapi/*
+!*.generated.yaml
+
+# Still ignore the root google-discovery-to-openapi folder except the files within openapi
+!google-discovery-to-openapi/*
 .artifacts/
