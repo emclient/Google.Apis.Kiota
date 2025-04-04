@@ -12,8 +12,6 @@ yq eval '
     # Delete non-standard enumDescriptions and enumDeprecated
     del(.. | select(has("enumDescriptions")).enumDescriptions) |
     del(.. | select(has("enumDeprecated")).enumDeprecated) |
-    # Update int64 to integer
-    with(.. | select(.format? == "int64"); .type = "integer") |
     # Add error responses
     .paths.[].[]?.["responses"]? += {"4XX":{"description":"Failure response","content":{"application/json":{"schema":{"$ref":"#/components/schemas/GoogleApiException"}}}}} |
     .paths.[].[]?.["responses"]? += {"5XX":{"description":"Failure response","content":{"application/json":{"schema":{"$ref":"#/components/schemas/GoogleApiException"}}}}} |
