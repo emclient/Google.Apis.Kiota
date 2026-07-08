@@ -12,6 +12,8 @@ yq eval '
     # Delete non-standard enumDescriptions and enumDeprecated
     del(.. | select(has("enumDescriptions")).enumDescriptions) |
     del(.. | select(has("enumDeprecated")).enumDeprecated) |
+    # Delete non-standard `any` types. An empty schema represents any value.
+    del(.. | select(.type? == "any").type) |
     # Add error responses
     .paths.[].[]?.["responses"]? += {"4XX":{"description":"Failure response","content":{"application/json":{"schema":{"$ref":"#/components/schemas/GoogleApiException"}}}}} |
     .paths.[].[]?.["responses"]? += {"5XX":{"description":"Failure response","content":{"application/json":{"schema":{"$ref":"#/components/schemas/GoogleApiException"}}}}} |
